@@ -1,0 +1,26 @@
+---
+import "../styles/globals.css";
+import Button from '../components/button.astro';
+---
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="generator" content={Astro.generator} />
+		<title>Jairo Rodero Villa</title>
+	</head>
+	<body class="max-w-4xl mx-auto">
+
+		<header class="mx-auto w-1/2 mt-10 mb-24 rounded">
+			<nav class="flex justify-around ">
+				<Button text="Home"></Button>
+				<Button text="About"></Button>
+				<Button text="Contact"></Button>
+			</nav>
+		</header>
+
+		<slot />
+	</body>
+</html>
