@@ -1,23 +1,32 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import Button from "../components/button.astro";
+import GithubIcon from "../components/icons/github.astro";
+import LinkedinIcon from "../components/icons/linkedin.astro";
 import { Image } from "astro:assets";
 import perfil from "../assets/profile.png";
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+
+// Import the MDX file
+import { getEntry } from 'astro:content';
+
+// Get the entry from the content collection
+const profile = await getEntry('data', 'profile');
+const { name, subname, role } = profile.data;
+const { Content } = await profile.render();
+
 ---
 
 <Layout>
-  <div class="flex gap-5">
-    <div class="flex flex-col gap-5  basis-1/4">
+  <div class="flex flex-col sm:flex-row mx-5 gap-5">
+    <div class="flex flex-col items-center gap-5  basis-1/4">
       <div
         class="bg-secondary shadow-[0.1em_0.1em] border-3 border-black rounded-lg h-52 w-60 shadow-card group-hover:shadow-hover flex transition relative group"
       >
         <div class="h-80 w-60 overflow-hidden relative -mt-29 rounded-lg">
           <Image
             src={perfil}
-            alt="profile photo"
+            alt="profile"
             width="315"
             height="377"
             loading="lazy"
@@ -27,22 +36,23 @@ import perfil from "../assets/profile.png";
         </div>
       </div>
 
-      <div class="flex flex-wrap justify-around gap-2">
-        <Button text="LinkedIn" />
-        <Button text="GitHub" />
+      <div class="grid grid-cols-2 gap-5">
+        <Button class="justify-center"  href="https://www.linkedin.com/in/jairo-rodero-villa-9867b8155" target="_blank">
+          <LinkedinIcon class="w-6 h-6"/> 
+        </Button>
+        <Button class="justify-center">
+          <GithubIcon class="w-6 h-6">
+        </Button>
       </div>
     </div>
 
     <div class=" basis-3/4">
-      <h1 class="font-bold text-4xl">Jairo Rodero</h1>
-      <h2 class="font-semibold text-2xl">Full Stack Developer</h2>
-      <p class="mt-5">
-        Hola! Soy Jairo, soy desarrollador Web Full Stack con experiencia en
-        tecnologías como PHP, JavaScript, HTML, CSS, MySQL... Me gusta ayudar y compartir mi conocimiento y experiencias con mis compañeros. Me considero una persona que le gusta trabajar en equipo y crear un ambiente de trabajo agradable.
+      <h1 class="font-bold text-4xl text-center sm:text-left">{name} {subname}</h1>
+      <h2 class="font-semibold text-2xl text-center sm:text-left">{role}</h2>
+      <p class="mt-5 prose prose-lg">
+        <Content/>
       </p>
-      <p class="mt-5">
-        En mi tiempo libre me gusta jugar al fútbol (o por lo menos intentarlo), me gusta en exceso escuchar música y descubrir curiosidades sobre esta.
-      </p>
+     
     </div>
   </div>
 </Layout>

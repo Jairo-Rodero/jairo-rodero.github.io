@@ -1,0 +1,53 @@
+---
+// Esta es la parte del servidor que se ejecuta en el momento de la construcción o petición
+interface Props {
+  date: Date | string;
+  type: 'seconds' | 'minutes' | 'hours' | 'days' | 'months' | 'years';
+}
+
+// Obtenemos la fecha que se nos ha pasado como parámetro
+const { date, type } = Astro.props;
+const targetDate = date instanceof Date ? date : new Date(date);
+---
+
+<div class="time-container">
+  <!-- Mostramos el resultado en un elemento strong -->
+  <div class="result">calculando...</div>
+
+  <!-- Script del lado del cliente para actualizaciones en tiempo real -->
+  <script define:vars={{ timestamp: targetDate.getTime(), type: type }}>
+    // Buscamos el elemento <strong> dentro del div padre
+    const scriptTag = document.currentScript;
+    const parentDiv = scriptTag.parentElement; // El <div> que contiene el script
+    const targetElement = parentDiv.querySelector('.time-container .result'); // El <strong> dentro del div
+
+    function updateElapsedTime() {
+      const now = new Date().getTime();
+      let secondsElapsed = Math.floor((now - timestamp) / 1000);
+      switch (type) {
+        case 'minutes':
+          secondsElapsed = Math.floor(secondsElapsed / 60);
+          break;
+        case 'hours':
+          secondsElapsed = Math.floor(secondsElapsed / 3600);
+          break;
+        case 'days':
+          secondsElapsed = Math.floor(secondsElapsed / 86400);
+          break;
+        case 'months':
+          secondsElapsed = Math.floor(secondsElapsed / 2592000);
+          break;
+        case 'years':
+          secondsElapsed = Math.floor(secondsElapsed / 31536000);
+          break;
+      }
+      targetElement.textContent = `${secondsElapsed} ${type}${secondsElapsed === 1 ? '' : 's'}`;
+    }
+    
+    // Actualizamos cada segundo
+    setInterval(updateElapsedTime, 1000);
+    
+    // Actualización inicial
+    updateElapsedTime();
+  </script>
+</div>
